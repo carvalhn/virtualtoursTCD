@@ -24,7 +24,7 @@ public class Main {
             int count = 0;
             Pattern pat = Pattern.compile("[*]He*");
             Matcher mat = pat.matcher(s);
-
+System.out.println("zfdfd");
             while(mat.find()){
                   if(mat.find()){
                       mat.start();
