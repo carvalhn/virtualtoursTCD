@@ -1,5 +1,6 @@
 package com.secondspring.db;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,11 +59,11 @@ public class VirtualGuideDBConnect
         try 
         {    
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM mytestdb.vgmuc_formmaker_submits where element_label=1;");
+            rs = stmt.executeQuery("SELECT Latitude FROM mytestdb.vgmuc_locations where ID=1;");
  
             while(rs.next())
             {
-                System.out.println("Employee ID="+rs.getInt("id"));
+                System.out.println("Latitude ="+rs.getBigDecimal("ID"));
 
              }
         } 
@@ -84,42 +85,54 @@ public class VirtualGuideDBConnect
 //            }
 //        }
 //        
-        List <Double> latitudeList = new ArrayList<Double>();
-        List <Double> longitudeList = new ArrayList<Double>();
-        List<Location> locationList = new ArrayList<Location>();
+        BigDecimal d = BigDecimal.ZERO;
+        List <BigDecimal> latitudeList = new ArrayList<BigDecimal>();
+        List <BigDecimal> longitudeList = new ArrayList<BigDecimal>();
+        List <String> touristCentreLocationNameList = new ArrayList<String>();
+        List <Location> locationList = new ArrayList<Location>();
       
         /* retrieves Latitude List for locations and adds to List latitudeList */
       
-        rs = stmt.executeQuery("SELECT element_value FROM mytestdb.vgmuc_formmaker_submits where element_label=2 order by group_id");
-      
+        rs = stmt.executeQuery("Select Latitude FROM mytestdb.vgmuc_locations order by ID");
         while(rs.next())
         {
-        	Double d=  Double.parseDouble(rs.getString("element_value"));
-        	latitudeList.add( d );
+        	d=  rs.getBigDecimal("Latitude");
+        //	System.out.println("\n Getting inside Lat iterator correctly");
+        	latitudeList.add(d);
         }
       
         /* retrieves Longitude List for locations and adds to List longitudeList */
       
-        rs = stmt.executeQuery("SELECT element_value FROM mytestdb.vgmuc_formmaker_submits where element_label=3 order by group_id");
-      
+        rs = stmt.executeQuery("SELECT Longitude FROM mytestdb.vgmuc_locations order by ID");
         while(rs.next())
         {
-    	  Double d=  Double.parseDouble(rs.getString("element_value"));
-         longitudeList.add( d );
+    	 d = rs.getBigDecimal("Longitude");
+         longitudeList.add(d);
         }	
-
+        
+        rs = stmt.executeQuery("SELECT Tourist_Centre_Location_Name FROM mytestdb.vgmuc_locations order by ID");
+        while(rs.next())
+        {
+    	 String a = rs.getString("Tourist_Centre_Location_Name");
+    	 touristCentreLocationNameList.add(a);
+        }
+        
         /* Adding Latitude, Longitude for each location to Location object, which is then added to a List of Location iteratively */
+        
         for (int i=1; i< latitudeList.size(); i++)
         {
-        	double lat = (double) latitudeList.get(i);
-        	double lon = (double) longitudeList.get(i);
+        	BigDecimal lat = latitudeList.get(i);
+        	BigDecimal lon = longitudeList.get(i);
+        	String locationName = touristCentreLocationNameList.get(i);
         	Location location = new Location();
         	location.setLatitude(lat);
         	location.setLongitude(lon);
+        	location.setTouristCentreLocationName(locationName);
         	locationList.add(location);
         }
        /* Closing the Database connection */ 
-       return locationList;
+      System.out.println("Reaching here correctly");
+        return locationList;
       
 	}	
 }

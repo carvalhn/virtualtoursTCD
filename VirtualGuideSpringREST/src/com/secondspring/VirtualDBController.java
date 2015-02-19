@@ -22,7 +22,7 @@ public class VirtualDBController {
 	
 	/* Code to get all locations when allLocations is present at the end of URL */
 	
-	@RequestMapping("/allLocations")
+	@RequestMapping("/getAllLocations")
 	@ResponseBody
     public Locations getLocationList() throws Exception {
 		
