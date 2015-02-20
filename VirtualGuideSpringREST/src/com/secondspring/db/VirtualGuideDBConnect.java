@@ -17,7 +17,7 @@ public class VirtualGuideDBConnect
 {
 		
 		/*This function tries to establish a connection to the database and returns the connection */
-	
+	String dbNAme="joomla";
 	public Connection getDataSource() throws Exception
 	{	
 		InitialContext cxt = new InitialContext();
@@ -59,7 +59,7 @@ public class VirtualGuideDBConnect
         try 
         {    
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT Latitude FROM mytestdb.vgmuc_locations where ID=1;");
+            rs = stmt.executeQuery("SELECT Latitude FROM vgmuc_locations where ID=1;");
  
             while(rs.next())
             {
@@ -93,7 +93,7 @@ public class VirtualGuideDBConnect
       
         /* retrieves Latitude List for locations and adds to List latitudeList */
       
-        rs = stmt.executeQuery("Select Latitude FROM mytestdb.vgmuc_locations order by ID");
+        rs = stmt.executeQuery("Select Latitude FROM vgmuc_locations order by ID");
         while(rs.next())
         {
         	d=  rs.getBigDecimal("Latitude");
@@ -103,14 +103,14 @@ public class VirtualGuideDBConnect
       
         /* retrieves Longitude List for locations and adds to List longitudeList */
       
-        rs = stmt.executeQuery("SELECT Longitude FROM mytestdb.vgmuc_locations order by ID");
+        rs = stmt.executeQuery("SELECT Longitude FROM vgmuc_locations order by ID");
         while(rs.next())
         {
     	 d = rs.getBigDecimal("Longitude");
          longitudeList.add(d);
         }	
         
-        rs = stmt.executeQuery("SELECT Tourist_Centre_Location_Name FROM mytestdb.vgmuc_locations order by ID");
+        rs = stmt.executeQuery("SELECT Tourist_Centre_Location_Name FROM vgmuc_locations order by ID");
         while(rs.next())
         {
     	 String a = rs.getString("Tourist_Centre_Location_Name");
