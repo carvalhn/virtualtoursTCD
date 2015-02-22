@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.secondspring.db.*;
 
 /* This Controller handles request which are forwarded from the Dispatcher Servlet */
-@Controller
-public class VirtualDBController {
+@RestController
+public class VirtualGuideController {
 	
 	/* Code to get all locations when allLocations is present at the end of URL */
 	
 	@RequestMapping("/getAllLocations")
-	@ResponseBody
-    public Locations getLocationList() throws Exception {
+    public Locations getAllLocationList() throws Exception {
 		
 		/* creates the DB Connection and retrieves locations through Query on mySQL - testdb in current system */
 		
@@ -50,5 +49,28 @@ public class VirtualDBController {
 		geoLocations.setLocation(allLocations);
         return geoLocations;
 	}
-	
+	@RequestMapping("/getLocationsForCurrentLocation")
+    public Locations getCurrentLocationList(@RequestParam ("ID") int ID) throws Exception 
+	{
+		
+		VirtualGuideDBConnect virtualGuideDBConnect= new VirtualGuideDBConnect();			
+		List<Location> currentLocationList= new ArrayList<Location>();
+		System.out.println("ID ="+ID);
+		currentLocationList=virtualGuideDBConnect.getLocationsForCurrentLocation(ID);
+		Locations currentLocations=new Locations();
+		currentLocations.setLocation(currentLocationList);
+        return currentLocations;
+		
+	}	
+		
+	@RequestMapping("/getDataForCurrentLocation")
+    public LocationData getDataForCurrentLocation(@RequestParam ("ID") int ID) throws Exception 
+	{
+		
+		VirtualGuideDBConnect virtualGuideDBConnect= new VirtualGuideDBConnect();			
+		LocationData locationData = new LocationData();
+		System.out.println("ID ="+ID);
+		locationData=virtualGuideDBConnect.getDataForCurrentLocation(ID);
+        return locationData;
+	}	
 }
